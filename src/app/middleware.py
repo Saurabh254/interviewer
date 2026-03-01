@@ -29,7 +29,7 @@ def add_http_log_middleware(app):
                 duration_ms = round((time.time() - start_time) * 1000, 2)
 
                 logger.exception(
-                    "http_request_failed", duration_ms=duration_ms, extra={"exec": exc}
+                    "http_request_failed", duration_ms=duration_ms, exc_info=exc
                 )
 
                 structlog.contextvars.clear_contextvars()
