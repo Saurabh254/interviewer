@@ -11,10 +11,10 @@ def add_http_log_middleware(app):
 
     class HTTPLogMiddleware(BaseHTTPMiddleware):
         async def dispatch(self, request, call_next):
-            logger.info(f"Incoming request: {request.method} {request.url}")
             correlation_id = (
                 request.headers.get("x-correlation-id") or generate_correlation_id()
             )
+            logger.info(f"Incoming request: {request.method} {request.url}", extra={"correlation_id": correlation_id})
 
             structlog.contextvars.bind_contextvars(
                 correlation_id=correlation_id,
@@ -29,7 +29,7 @@ def add_http_log_middleware(app):
                 duration_ms = round((time.time() - start_time) * 1000, 2)
 
                 logger.exception(
-                    "http_request_failed", duration_ms=duration_ms, exc_info=exc
+                    "http_request_failed", duration_ms=duration_ms, exc_info=exc, extra={"correlation_id": correlation_id}
                 )
 
                 structlog.contextvars.clear_contextvars()

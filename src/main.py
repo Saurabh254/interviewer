@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.common.logging import configure
+from app.exception_handler import add_exception_handler
 from app.middleware import add_http_log_middleware
 from app.api import router as api_router
 import structlog
@@ -28,6 +29,7 @@ app = FastAPI(
 
 app.include_router(api_router, prefix="/api")
 add_http_log_middleware(app)
+add_exception_handler(app)
 
 
 if __name__ == "__main__":
