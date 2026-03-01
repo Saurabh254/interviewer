@@ -1,0 +1,7 @@
+class LivekitException(Exception):
+    """Exception raised when LiveKit operations fail."""
+
+    def __init__(self, message: str, extra: dict | None = None):
+        super().__init__(message)
+        self.message = message
+        self.extra = extra or {}
